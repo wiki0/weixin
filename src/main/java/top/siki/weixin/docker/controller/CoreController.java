@@ -11,7 +11,7 @@ import top.siki.weixin.docker.util.SignUtil;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/")
 public class CoreController {
     @Autowired
     private CoreService coreService;
