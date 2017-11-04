@@ -1,4 +1,4 @@
-FROM java:8
+FROM registry.ap-southeast-1.aliyuncs.com/wiki0/java:8
 VOLUME /tmp
 ADD ./docker-weixin-0.0.1-SNAPSHOT.jar app.jar
 #RUN bash -c 'touch /app.jar'

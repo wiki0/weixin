@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import top.siki.weixin.docker.service.CoreService;
+import top.siki.weixin.docker.service.CoreServiceImpl;
 import top.siki.weixin.docker.util.SignUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/")
 public class CoreController {
     @Autowired
-    private CoreService coreService;
+    private CoreServiceImpl coreService;
 
     //增加日志
     private static Logger log = LoggerFactory.getLogger(CoreController.class);
