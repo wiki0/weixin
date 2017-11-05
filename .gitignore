@@ -1,5 +1,5 @@
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!/target/docker-weixin-0.0.1-SNAPSHOT.jar
 
 ### STS ###
 .apt_generated
@@ -23,9 +23,4 @@ dist/
 nbdist/
 .nb-gradle/
 .DS_Store
-src/.DS_Store
-src/main/.DS_Store
-src/main/java/.DS_Store
-src/main/java/top/.DS_Store
-src/main/java/top/siki/.DS_Store
 src/main/resources/templates/
