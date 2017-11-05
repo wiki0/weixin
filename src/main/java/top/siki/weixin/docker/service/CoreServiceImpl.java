@@ -171,7 +171,7 @@ public class CoreServiceImpl implements CoreService {
                 String quote = restTemplate.getForObject(url, String.class);
                 JSONObject json = new JSONObject(quote);
                 JSONArray hobbies = json.getJSONArray("results");
-                String flag = "0";
+//                String flag = "0";
 //                for (int i = 0; i < hobbies.length(); i++) {
                     String s = hobbies.get(1).toString();
                     JSONObject ste = new JSONObject(s);
