@@ -1,6 +1,11 @@
 package top.siki.weixin.docker.service;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
 import top.siki.weixin.docker.response.TextMessage;
@@ -22,6 +27,14 @@ import java.util.regex.Pattern;
  */
 @Service("coreService")
 public class CoreServiceImpl implements CoreService {
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    // Restful服务对应的url地址
+    @Value("${service.picRec}")
+    private String picService;
+
 
     private static Logger log = LoggerFactory.getLogger(CoreServiceImpl.class);
 
@@ -47,7 +60,6 @@ public class CoreServiceImpl implements CoreService {
             String msgType = requestMap.get("MsgType");
             //图片地址
             String picUrl = requestMap.get("PicUrl");
-            log.info("picurl: "+picUrl);
             // 回复文本消息
             TextMessage textMessage = new TextMessage();
             textMessage.setToUserName(fromUserName);
@@ -155,8 +167,16 @@ public class CoreServiceImpl implements CoreService {
             }
             // 图片消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
-
-                respContent = picUrl;
+                String url = this.picService + picUrl;
+                String quote = restTemplate.getForObject(url, String.class);
+                JSONObject json = new JSONObject(quote);
+                JSONArray hobbies = json.getJSONArray("results");
+                String flag = "0";
+//                for (int i = 0; i < hobbies.length(); i++) {
+                    String s = hobbies.get(1).toString();
+                    JSONObject ste = new JSONObject(s);
+                    respContent = ste.get("sentence").toString();
+//                }
                 textMessage.setContent(respContent);
                 // 将文本消息对象转换成xml字符串
                 respMessage = MessageUtil.textMessageToXml(textMessage);
