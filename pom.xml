@@ -58,18 +58,18 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.4.13</version>
-				<executions>
-                    <execution>
-                        <id>build-image</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
+				<!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>build-image</id>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>build</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
                 <configuration>
                     <imageName>wiki0/weixin:laster</imageName>
-                    <dockerDirectory>${project.basedir}</dockerDirectory>
+                    <dockerDirectory>${project.basedir}v</dockerDirectory>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
