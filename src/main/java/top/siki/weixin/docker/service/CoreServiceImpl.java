@@ -155,7 +155,7 @@ public class CoreServiceImpl implements CoreService {
                         }
 
                         default: {
-                            respContent = "（这是里面的）很抱歉，现在小8暂时无法提供此功能给您使用。\n\n回复“1”显示帮助信息";
+                            respContent = "很抱歉，时无法提供此功能给您使用。\n\n回复“1”显示帮助信息";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
