@@ -193,7 +193,6 @@ public class CoreServiceImpl implements CoreService {
                 respContent = "您发送的是链接消息！";textMessage.setContent(respContent);
                 // 将文本消息对象转换成xml字符串
                 respMessage = MessageUtil.textMessageToXml(textMessage);
-
             }
             // 音频消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VOICE)) {
