@@ -1,4 +1,4 @@
-target/
+target/*
 !/target/docker-weixin-0.0.1-SNAPSHOT.jar
 
 ### STS ###
@@ -23,4 +23,4 @@ dist/
 nbdist/
 .nb-gradle/
 .DS_Store
-src/main/resources/templates/
+
