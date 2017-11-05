@@ -217,9 +217,9 @@ public class CoreServiceImpl implements CoreService {
         boolean result = false;
 
         // 判断QQ表情的正则表达式
-        Pattern pattern = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]");
-        Matcher matcher = pattern.matcher(content);
-        if (matcher.matches()) {
+        Pattern p = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",Pattern.UNICODE_CASE|Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(content);
+        if (m.matches()) {
             result = true;
         }
         return result;
