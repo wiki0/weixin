@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -167,7 +168,8 @@ public class CoreServiceImpl implements CoreService {
             }
             // 图片消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
-                String url = this.picService + picUrl;
+                InetAddress ip= InetAddress.getByName(this.picService);
+                String url = "http://"+ip.getHostAddress()+"/im2txt?url=" + picUrl;
                 String quote = restTemplate.getForObject(url, String.class);
                 JSONObject json = new JSONObject(quote);
                 JSONArray hobbies = json.getJSONArray("results");
