@@ -10,4 +10,4 @@ wechat:
     token: wiki2link
     aesKey: kyZnHHulSl5IUHe4PlNrrxb4gsUM97NjGWAqeeED1ST
 service:
-  picRec: http://siki.top:8080/im2txt?url=
+  picRec: http://localhost:80/im2txt?url=
