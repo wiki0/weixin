@@ -16,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -172,13 +169,15 @@ public class CoreServiceImpl implements CoreService {
                 String url = "http://"+ip.getHostAddress()+"/im2txt?url=" + picUrl;
                 String quote = restTemplate.getForObject(url, String.class);
                 JSONObject json = new JSONObject(quote);
-                JSONArray hobbies = json.getJSONArray("results");
-//                String flag = "0";
-//                for (int i = 0; i < hobbies.length(); i++) {
-                    String s = hobbies.get(1).toString();
-                    JSONObject ste = new JSONObject(s);
-                    respContent = ste.get("sentence").toString();
-//                }
+                JSONArray jsonArray = json.getJSONArray("results");
+                StringBuilder rep = new StringBuilder();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+                    Double num = jsonObject2.getDouble("probability");
+                    String talk =  jsonObject2.getString("sentence");
+                    rep.append(talk +" "+num+"%可能性\n");
+                }
+                respContent = rep.toString();
                 textMessage.setContent(respContent);
                 // 将文本消息对象转换成xml字符串
                 respMessage = MessageUtil.textMessageToXml(textMessage);
