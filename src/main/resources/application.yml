@@ -10,4 +10,6 @@ wechat:
     token: wiki2link
     aesKey: kyZnHHulSl5IUHe4PlNrrxb4gsUM97NjGWAqeeED1ST
 service:
-  picRec: http://gotalk:80/im2txt?url=
+  picRec: gotalk
+#servet:
+#  port: 8081
