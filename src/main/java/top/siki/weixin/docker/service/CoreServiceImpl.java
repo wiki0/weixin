@@ -232,7 +232,7 @@ public class CoreServiceImpl implements CoreService {
                 OkHttpClient client = new OkHttpClient();
 
                 MediaType mediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":3},{\"type\":\"WEB_DETECTION\",\"maxResults\":2},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
+                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":4},{\"type\":\"WEB_DETECTION\",\"maxResults\":1},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
                 Request request2 = new Request.Builder()
                         .url("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac")
                         .post(body)
