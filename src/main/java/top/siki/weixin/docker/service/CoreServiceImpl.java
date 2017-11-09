@@ -166,19 +166,19 @@ public class CoreServiceImpl implements CoreService {
             // 图片消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
                 InetAddress ip= InetAddress.getByName(this.picService);
-                String url = "http://"+ip.getHostAddress()+"/im2txt?url=" + picUrl;
-                String quote = restTemplate.getForObject(url, String.class);
-                JSONObject json = new JSONObject(quote);
-                JSONArray jsonArray = json.getJSONArray("results");
-                StringBuilder rep = new StringBuilder();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-                    Double num = jsonObject2.getDouble("probability");
-                    String talk =  jsonObject2.getString("sentence");
-                    rep.append(talk +" "+num+"%可能性\n");
-                }
-                respContent = rep.toString();
-                textMessage.setContent(respContent);
+//                String url = "http://"+ip.getHostAddress()+"/im2txt?url=" + picUrl;
+//                String quote = restTemplate.getForObject(url, String.class);
+//                JSONObject json = new JSONObject(quote);
+//                JSONArray jsonArray = json.getJSONArray("results");
+//                StringBuilder rep = new StringBuilder();
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    JSONObject jsonObject2 = jsonArray.getJSONObject(i);
+//                    Double num = jsonObject2.getDouble("probability");
+//                    String talk =  jsonObject2.getString("sentence");
+//                    rep.append(talk +" "+num+"%可能性\n");
+//                }
+//                respContent = rep.toString();
+                textMessage.setContent(picUrl);
                 // 将文本消息对象转换成xml字符串
                 respMessage = MessageUtil.textMessageToXml(textMessage);
             }
