@@ -165,7 +165,7 @@ public class CoreServiceImpl implements CoreService {
             }
             // 图片消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
-                InetAddress ip= InetAddress.getByName(this.picService);
+//                InetAddress ip= InetAddress.getByName(this.picService);
 //                String url = "http://"+ip.getHostAddress()+"/im2txt?url=" + picUrl;
 //                String quote = restTemplate.getForObject(url, String.class);
 //                JSONObject json = new JSONObject(quote);
