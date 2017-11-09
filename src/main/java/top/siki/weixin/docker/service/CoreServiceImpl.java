@@ -1,6 +1,10 @@
 package top.siki.weixin.docker.service;
 
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -118,11 +122,11 @@ public class CoreServiceImpl implements CoreService {
                         }
                         case "12": {
                             //多图文发送
-                            Article article1 = new Article();
-                            article1.setTitle("紧急通知，不要捡这种钱！湛江都已经传疯了！\n");
-                            article1.setDescription("");
-                            article1.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
-                            article1.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=1&sn=8bb6ae54d6396c1faa9182a96f30b225&chksm=bd117e7f8a66f769dc886d38ca2d4e4e675c55e6a5e01e768b383f5859e09384e485da7bed98&scene=4#wechat_redirect");
+                            Article article = new Article();
+                            article.setTitle("紧急通知，不要捡这种钱！湛江都已经传疯了！\n");
+                            article.setDescription("");
+                            article.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
+                            article.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=1&sn=8bb6ae54d6396c1faa9182a96f30b225&chksm=bd117e7f8a66f769dc886d38ca2d4e4e675c55e6a5e01e768b383f5859e09384e485da7bed98&scene=4#wechat_redirect");
 
                             Article article2 = new Article();
                             article2.setTitle("湛江谁有这种女儿，请给我来一打！");
@@ -136,7 +140,7 @@ public class CoreServiceImpl implements CoreService {
                             article3.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
                             article3.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=3&sn=63e13fe558ff0d564c0da313b7bdfce0&chksm=bd117e7f8a66f7693a26853dc65c3e9ef9495235ef6ed6c7796f1b63abf1df599aaf9b33aafa&scene=4#wechat_redirect");
 
-                            articleList.add(article1);
+                            articleList.add(article);
                             articleList.add(article2);
                             articleList.add(article3);
                             newsMessage.setArticleCount(articleList.size());
@@ -147,7 +151,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">15.53</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">17.05</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -191,31 +195,31 @@ public class CoreServiceImpl implements CoreService {
 //                stringBuilder.append("\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":2},{\"type\":\"WEB_DETECTION\",\"maxResults\":3},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
 //                JsonObject jsonObj = new JsonParser().parse(stringBuilder.toString()).getAsJsonObject();
 
-                JSONObject jsonObj = new JSONObject();
-                JSONObject  requests = new JSONObject();
-
-                JSONObject image = new JSONObject();
-                JSONObject source = new JSONObject();
-                source.put("imageUri",picUrl);
-                image.put("source",source);
-                requests.put("image",image);
-
-                JSONArray features = new JSONArray();
-                JSONObject object1 = new JSONObject();
-                object1.put("type","SAFE_SEARCH_DETECTION");
-                features.put(object1);
-                JSONObject object2 = new JSONObject();
-                object2.put("type","LABEL_DETECTION");
-                object2.put("maxResults",2);
-                features.put(object2);
-                JSONObject object3 = new JSONObject();
-                object3.put("type","WEB_DETECTION");
-                object3.put("maxResults",3);
-                features.put(object3);
-                requests.put("features",features);
-
-
-                jsonObj.put("requests",requests);
+//                JSONObject jsonObj = new JSONObject();
+//                JSONObject  requests = new JSONObject();
+//
+//                JSONObject image = new JSONObject();
+//                JSONObject source = new JSONObject();
+//                source.put("imageUri",picUrl);
+//                image.put("source",source);
+//                requests.put("image",image);
+//
+//                JSONArray features = new JSONArray();
+//                JSONObject object1 = new JSONObject();
+//                object1.put("type","SAFE_SEARCH_DETECTION");
+//                features.put(object1);
+//                JSONObject object2 = new JSONObject();
+//                object2.put("type","LABEL_DETECTION");
+//                object2.put("maxResults",2);
+//                features.put(object2);
+//                JSONObject object3 = new JSONObject();
+//                object3.put("type","WEB_DETECTION");
+//                object3.put("maxResults",3);
+//                features.put(object3);
+//                requests.put("features",features);
+//
+//
+//                jsonObj.put("requests",requests);
 
 //                log.info(jsonObj.toString());
 //                HttpEntity<String> formEntity = new HttpEntity<String>(jsonObj.toString(), headers);
@@ -228,7 +232,7 @@ public class CoreServiceImpl implements CoreService {
                 OkHttpClient client = new OkHttpClient();
 
                 MediaType mediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\"http://mmbiz.qpic.cn/mmbiz_jpg/gibVq5g3r8MGdTN52JONrFh0RN5ibJUHg6bTzFfwicGVIVR2qyj2LOlgQ6JGFNibTFtPDI7BxfdEXHgQcYpF7QTcdA/0\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":2},{\"type\":\"WEB_DETECTION\",\"maxResults\":3},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
+                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":3},{\"type\":\"WEB_DETECTION\",\"maxResults\":2},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
                 Request request2 = new Request.Builder()
                         .url("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac")
                         .post(body)
@@ -238,41 +242,60 @@ public class CoreServiceImpl implements CoreService {
                         .build();
 
                 Response response = client.newCall(request2).execute();
-                String res = response.body().toString();
-                System.out.println(response.toString());
-                System.out.println(response.body().string());
-                System.out.println(res);
+                String res = response.body().string();
+                //先转JsonObject
+                JsonObject jsonObject = new JsonParser().parse(res).getAsJsonObject();
+                //再转JsonArray 加上数据头
+                JsonArray jsonArray = jsonObject.getAsJsonArray("responses");
+                JsonObject object = jsonArray.get(0).getAsJsonObject();
+                JsonObject webDetection = object.get("webDetection").getAsJsonObject();
+                JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
+                if (null != webDetection.get("fullMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
+                        Article article = new Article();
+                        article.setTitle("最佳匹配");
+                        article.setDescription("");
+                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
+                        article.setUrl(object1.getAsJsonObject().get("url").toString());
+                        articleList.add(article);
+                    }
+                }
 
-//                respContent = res.toString();
-                textMessage.setContent(res);
-                // 将文本消息对象转换成xml字符串
-                respMessage = MessageUtil.textMessageToXml(textMessage);
-                //                            //多图文发送
-//                Article article1 = new Article();
-//                article1.setTitle("紧急通知，不要捡这种钱！湛江都已经传疯了！\n");
-//                article1.setDescription("");
-//                article1.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
-//                article1.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=1&sn=8bb6ae54d6396c1faa9182a96f30b225&chksm=bd117e7f8a66f769dc886d38ca2d4e4e675c55e6a5e01e768b383f5859e09384e485da7bed98&scene=4#wechat_redirect");
-//
-//                Article article2 = new Article();
-//                article2.setTitle("湛江谁有这种女儿，请给我来一打！");
-//                article2.setDescription("");
-//                article2.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
-//                article2.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=2&sn=d7ffc840c7e6d91b0a1c886b16797ee9&chksm=bd117e7f8a66f7698d094c2771a1114853b97dab9c172897c3f9f982eacb6619fba5e6675ea3&scene=4#wechat_redirect");
-//
-//                Article article3 = new Article();
-//                article3.setTitle("以上图片我就随意放了");
-//                article3.setDescription("");
-//                article3.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
-//                article3.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=3&sn=63e13fe558ff0d564c0da313b7bdfce0&chksm=bd117e7f8a66f7693a26853dc65c3e9ef9495235ef6ed6c7796f1b63abf1df599aaf9b33aafa&scene=4#wechat_redirect");
-//
-//                articleList.add(article1);
-//                articleList.add(article2);
-//                articleList.add(article3);
-//                newsMessage.setArticleCount(articleList.size());
-//                newsMessage.setArticles(articleList);
-//                respMessage = MessageUtil.newsMessageToXml(newsMessage);
-//                textMessage.setContent(picUrl);
+                if (null != webDetection.get("visuallySimilarImages")){
+                    for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
+                        Article article = new Article();
+                        article.setTitle("视觉相似");
+                        article.setDescription("");
+                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
+                        article.setUrl(object1.getAsJsonObject().get("url").toString());
+                        articleList.add(article);
+                    }
+                }
+                if (null != webDetection.get("pagesWithMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
+                        Article article = new Article();
+                        article.setTitle("可能出处");
+                        article.setDescription("");
+                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
+                        article.setUrl(object1.getAsJsonObject().get("url").toString());
+                        articleList.add(article);
+                    }
+                }
+                if (null != webDetection.get("partialMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
+                        Article article = new Article();
+                        article.setTitle("部分相似");
+                        article.setDescription("");
+                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
+                        article.setUrl(object1.getAsJsonObject().get("url").toString());
+                        articleList.add(article);
+                    }
+                }
+                //多图文发送
+                newsMessage.setArticleCount(articleList.size());
+                newsMessage.setArticles(articleList);
+                respMessage = MessageUtil.newsMessageToXml(newsMessage);
+                textMessage.setContent(picUrl);
 
             }
             // 地理位置消息
