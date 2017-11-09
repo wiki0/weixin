@@ -154,7 +154,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">17.05</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">09.10</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -254,29 +254,32 @@ public class CoreServiceImpl implements CoreService {
                 JsonObject webDetection = object.get("webDetection").getAsJsonObject();
                 JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
                 //测试单图文回复
+
+                String uremic = "";
                 Article article = new Article();
                 if (null != webDetection.get("fullMatchingImages")){
                     for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
                         article.setTitle("最佳匹配");
-                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
+                        uremic = object1.getAsJsonObject().get("url").toString();
                     }
                 }else if (null != webDetection.get("visuallySimilarImages")){
                     for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
                         article.setTitle("视觉相似");
-                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
+                        uremic = object1.getAsJsonObject().get("url").toString();
                     }
                 }else if (null != webDetection.get("pagesWithMatchingImages")){
                     for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
                         article.setTitle("可能出处");
-                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
-                        article.setUrl(object1.getAsJsonObject().get("url").toString());
+                        uremic = object1.getAsJsonObject().get("url").toString();
                     }
                 }else if (null != webDetection.get("partialMatchingImages")){
                     for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
                         article.setTitle("部分相似");
-                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
+                        uremic = object1.getAsJsonObject().get("url").toString();
                     }
                 }
+                System.out.println(uremic);
+                article.setPicUrl("http://www.wiki2link.top/"+ makepic(uremic)+".jpg");
                 article.setDescription(safeSearchAnnotation.toString());
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
@@ -330,6 +333,7 @@ public class CoreServiceImpl implements CoreService {
     }
 
     public static String makepic(String geturl) throws Exception {
+        log.debug(geturl);
         URL url = new URL(geturl);
         //打开链接
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
