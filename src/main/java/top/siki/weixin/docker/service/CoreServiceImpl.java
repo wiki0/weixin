@@ -1,10 +1,16 @@
 package top.siki.weixin.docker.service;
 
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
@@ -178,9 +184,87 @@ public class CoreServiceImpl implements CoreService {
 //                    rep.append(talk +" "+num+"%可能性\n");
 //                }
 //                respContent = rep.toString();
-                textMessage.setContent(picUrl);
+
+                HttpHeaders headers = new HttpHeaders();
+                MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+                headers.setContentType(type);
+                headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+
+
+//                StringBuilder stringBuilder = new StringBuilder();
+//                stringBuilder.append("{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\"");
+//                stringBuilder.append(picUrl);
+//                stringBuilder.append("\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":2},{\"type\":\"WEB_DETECTION\",\"maxResults\":3},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
+//                JsonObject jsonObj = new JsonParser().parse(stringBuilder.toString()).getAsJsonObject();
+
+                JSONObject jsonObj = new JSONObject();
+                JSONObject  requests = new JSONObject();
+
+                JSONObject image = new JSONObject();
+                JSONObject source = new JSONObject();
+                source.put("imageUri",picUrl);
+                image.put("source",source);
+                requests.put("image",image);
+
+                JSONArray features = new JSONArray();
+                JSONObject object1 = new JSONObject();
+                object1.put("type","SAFE_SEARCH_DETECTION");
+                features.put(object1);
+                JSONObject object2 = new JSONObject();
+                object2.put("type","LABEL_DETECTION");
+                object2.put("maxResults",2);
+                features.put(object2);
+                JSONObject object3 = new JSONObject();
+                object3.put("type","WEB_DETECTION");
+                object3.put("maxResults",3);
+                features.put(object3);
+                requests.put("features",features);
+
+
+                jsonObj.put("requests",requests);
+
+//                log.info(jsonObj.toString());
+//                HttpEntity<String> formEntity = new HttpEntity<String>(jsonObj.toString(), headers);
+//                log.info(formEntity.toString());
+//                JSONObject res = restTemplate.postForObject("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac", formEntity, JSONObject.class);
+
+                String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac";
+                JSONObject res = restTemplate.postForEntity(url, jsonObj, JSONObject.class).getBody();
+
+
+                System.out.println(res.toString());
+
+                respContent = res.toString();
+                textMessage.setContent(respContent);
                 // 将文本消息对象转换成xml字符串
                 respMessage = MessageUtil.textMessageToXml(textMessage);
+                //                            //多图文发送
+//                Article article1 = new Article();
+//                article1.setTitle("紧急通知，不要捡这种钱！湛江都已经传疯了！\n");
+//                article1.setDescription("");
+//                article1.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
+//                article1.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=1&sn=8bb6ae54d6396c1faa9182a96f30b225&chksm=bd117e7f8a66f769dc886d38ca2d4e4e675c55e6a5e01e768b383f5859e09384e485da7bed98&scene=4#wechat_redirect");
+//
+//                Article article2 = new Article();
+//                article2.setTitle("湛江谁有这种女儿，请给我来一打！");
+//                article2.setDescription("");
+//                article2.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
+//                article2.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=2&sn=d7ffc840c7e6d91b0a1c886b16797ee9&chksm=bd117e7f8a66f7698d094c2771a1114853b97dab9c172897c3f9f982eacb6619fba5e6675ea3&scene=4#wechat_redirect");
+//
+//                Article article3 = new Article();
+//                article3.setTitle("以上图片我就随意放了");
+//                article3.setDescription("");
+//                article3.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
+//                article3.setUrl("http://mp.weixin.qq.com/s?__biz=MjM5Njc2OTI4NQ==&mid=2650924309&idx=3&sn=63e13fe558ff0d564c0da313b7bdfce0&chksm=bd117e7f8a66f7693a26853dc65c3e9ef9495235ef6ed6c7796f1b63abf1df599aaf9b33aafa&scene=4#wechat_redirect");
+//
+//                articleList.add(article1);
+//                articleList.add(article2);
+//                articleList.add(article3);
+//                newsMessage.setArticleCount(articleList.size());
+//                newsMessage.setArticles(articleList);
+//                respMessage = MessageUtil.newsMessageToXml(newsMessage);
+//                textMessage.setContent(picUrl);
+
             }
             // 地理位置消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) {
