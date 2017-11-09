@@ -20,6 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -250,52 +253,35 @@ public class CoreServiceImpl implements CoreService {
                 JsonObject object = jsonArray.get(0).getAsJsonObject();
                 JsonObject webDetection = object.get("webDetection").getAsJsonObject();
                 JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
+                //测试单图文回复
+                Article article = new Article();
                 if (null != webDetection.get("fullMatchingImages")){
                     for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
-                        Article article = new Article();
                         article.setTitle("最佳匹配");
-                        article.setDescription("");
-                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
-                        article.setUrl(object1.getAsJsonObject().get("url").toString());
-                        articleList.add(article);
+                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
                     }
-                }
-
-                if (null != webDetection.get("visuallySimilarImages")){
+                }else if (null != webDetection.get("visuallySimilarImages")){
                     for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
-                        Article article = new Article();
                         article.setTitle("视觉相似");
-                        article.setDescription("");
-                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
-                        article.setUrl(object1.getAsJsonObject().get("url").toString());
-                        articleList.add(article);
+                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
                     }
-                }
-                if (null != webDetection.get("pagesWithMatchingImages")){
+                }else if (null != webDetection.get("pagesWithMatchingImages")){
                     for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
-                        Article article = new Article();
                         article.setTitle("可能出处");
-                        article.setDescription("");
-                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
+                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
                         article.setUrl(object1.getAsJsonObject().get("url").toString());
-                        articleList.add(article);
                     }
-                }
-                if (null != webDetection.get("partialMatchingImages")){
+                }else if (null != webDetection.get("partialMatchingImages")){
                     for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
-                        Article article = new Article();
                         article.setTitle("部分相似");
-                        article.setDescription("");
-                        article.setPicUrl(object1.getAsJsonObject().get("url").toString());
-                        article.setUrl(object1.getAsJsonObject().get("url").toString());
-                        articleList.add(article);
+                        article.setPicUrl("http://www.wiki2link.top/"+ makepic(object1.getAsJsonObject().get("url").toString())+".jpg");
                     }
                 }
-                //多图文发送
+                article.setDescription(safeSearchAnnotation.toString());
+                articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
                 newsMessage.setArticles(articleList);
                 respMessage = MessageUtil.newsMessageToXml(newsMessage);
-                textMessage.setContent(picUrl);
 
             }
             // 地理位置消息
@@ -341,5 +327,46 @@ public class CoreServiceImpl implements CoreService {
             result = true;
         }
         return result;
+    }
+
+    public static String makepic(String geturl) throws Exception {
+        URL url = new URL(geturl);
+        //打开链接
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        //设置请求方式为"GET"
+        conn.setRequestMethod("GET");
+        //超时响应时间为5秒
+        conn.setConnectTimeout(5 * 1000);
+        //通过输入流获取图片数据
+        InputStream inStream = conn.getInputStream();
+        //得到图片的二进制数据，以二进制封装得到数据，具有通用性
+        byte[] data = readInputStream(inStream);
+        //new一个文件对象用来保存图片，默认保存当前工程根目录
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        File imageFile = new File("./src/main/resources/static/"+uuid+".jpg");
+        //创建输出流
+        FileOutputStream outStream = new FileOutputStream(imageFile);
+        //写入数据
+        outStream.write(data);
+        //关闭输出流
+        outStream.close();
+        return uuid;
+    }
+
+    public static byte[] readInputStream(InputStream inStream) throws Exception{
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        //创建一个Buffer字符串
+        byte[] buffer = new byte[1024];
+        //每次读取的字符串长度，如果为-1，代表全部读取完毕
+        int len = 0;
+        //使用一个输入流从buffer里把数据读取出来
+        while( (len=inStream.read(buffer)) != -1 ){
+            //用输出流往buffer里写入数据，中间参数代表从哪个位置开始读，len代表读取的长度
+            outStream.write(buffer, 0, len);
+        }
+        //关闭输入流
+        inStream.close();
+        //把outStream里的数据写入内存
+        return outStream.toByteArray();
     }
 }
