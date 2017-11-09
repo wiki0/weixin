@@ -147,7 +147,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">15.27</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">15.32</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -237,9 +237,9 @@ public class CoreServiceImpl implements CoreService {
                         .addHeader("postman-token", "33546e9d-8c2a-fb75-e955-3be6796f0767")
                         .build();
 
-                Response res = client.newCall(request2).execute();
-
-                System.out.println(res.toString());
+                Response response = client.newCall(request2).execute();
+                String res = response.body().toString();
+                System.out.println(res);
 
                 respContent = res.toString();
                 textMessage.setContent(respContent);
