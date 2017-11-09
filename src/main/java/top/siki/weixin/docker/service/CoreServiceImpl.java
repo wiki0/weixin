@@ -17,16 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -158,7 +152,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">1221</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">1112222</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -337,10 +331,8 @@ public class CoreServiceImpl implements CoreService {
     }
 
     public static String makepic(String geturl) throws Exception {
-        log.debug(geturl);
-        URL url = new URL(geturl);
-        //开启全部证书信任
-        trustAllHosts();
+        log.debug(geturl.replaceAll("https","http"));
+        URL url = new URL(geturl.replaceAll("https","http"));
         //打开链接
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         //设置请求方式为"GET"
@@ -380,33 +372,4 @@ public class CoreServiceImpl implements CoreService {
         return outStream.toByteArray();
     }
 
-    private static void trustAllHosts() {
-        final String TAG = "trustAllHosts";
-        // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] {
-                new X509TrustManager() {
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return new java.security.cert.X509Certificate[] {};
-                    }
-
-                    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                        log.info(TAG, "checkClientTrusted");
-                    }
-
-                    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                        log.info(TAG, "checkServerTrusted");
-                    }
-                }
-
-        };
-
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
