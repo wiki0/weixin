@@ -1,16 +1,11 @@
 package top.siki.weixin.docker.service;
 
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.apache.commons.codec.digest.DigestUtils;
+import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
@@ -21,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -153,7 +147,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">我的主页1</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">15.27</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -185,10 +179,10 @@ public class CoreServiceImpl implements CoreService {
 //                }
 //                respContent = rep.toString();
 
-                HttpHeaders headers = new HttpHeaders();
-                MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
-                headers.setContentType(type);
-                headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+//                HttpHeaders headers = new HttpHeaders();
+//                MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+//                headers.setContentType(type);
+//                headers.add("Accept", MediaType.APPLICATION_JSON.toString());
 
 
 //                StringBuilder stringBuilder = new StringBuilder();
@@ -228,9 +222,22 @@ public class CoreServiceImpl implements CoreService {
 //                log.info(formEntity.toString());
 //                JSONObject res = restTemplate.postForObject("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac", formEntity, JSONObject.class);
 
-                String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac";
-                JSONObject res = restTemplate.postForEntity(url, jsonObj, JSONObject.class).getBody();
+//                String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac";
+//                JSONObject res = restTemplate.postForEntity(url, jsonObj, JSONObject.class).getBody();
 
+                OkHttpClient client = new OkHttpClient();
+
+                MediaType mediaType = MediaType.parse("application/json");
+                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\"http://mmbiz.qpic.cn/mmbiz_jpg/gibVq5g3r8MGdTN52JONrFh0RN5ibJUHg6bTzFfwicGVIVR2qyj2LOlgQ6JGFNibTFtPDI7BxfdEXHgQcYpF7QTcdA/0\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":2},{\"type\":\"WEB_DETECTION\",\"maxResults\":3},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
+                Request request2 = new Request.Builder()
+                        .url("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac")
+                        .post(body)
+                        .addHeader("content-type", "application/json")
+                        .addHeader("cache-control", "no-cache")
+                        .addHeader("postman-token", "33546e9d-8c2a-fb75-e955-3be6796f0767")
+                        .build();
+
+                Response res = client.newCall(request2).execute();
 
                 System.out.println(res.toString());
 
