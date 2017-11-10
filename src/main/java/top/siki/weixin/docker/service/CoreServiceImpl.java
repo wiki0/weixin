@@ -141,7 +141,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">06.37</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">11.11</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -321,7 +321,7 @@ public class CoreServiceImpl implements CoreService {
     }
 
     public static String makepic(String geturl) throws Exception {
-        log.debug(geturl);
+        System.out.println("geturl: "+geturl);
 
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String path="/tmp/"+uuid+".jpg";
@@ -333,7 +333,7 @@ public class CoreServiceImpl implements CoreService {
     private static void downloadPicture(String urlList,String path) {
         URL url = null;
         try {
-            System.out.println("url: "+urlList);
+            System.out.println("urlList: "+urlList);
             url = new URL(urlList);
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
