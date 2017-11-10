@@ -152,7 +152,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">10.99</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">09.33</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -334,7 +334,7 @@ public class CoreServiceImpl implements CoreService {
         log.debug(geturl);
 
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String path="/tmp/pic/"+uuid+".jpg";
+        String path="/tmp/"+uuid+".jpg";
         downloadPicture(geturl,path);
         return uuid;
     }
