@@ -323,7 +323,7 @@ public class CoreServiceImpl implements CoreService {
         log.debug(geturl);
 
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String path="./src/main/resources/static/"+uuid+".jpg";
+        String path="/tmp/"+uuid+".jpg";
         downloadPicture(geturl,path);
         return uuid;
     }
