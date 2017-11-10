@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -333,8 +334,8 @@ public class CoreServiceImpl implements CoreService {
     private static void downloadPicture(String urlList,String path) {
         URL url = null;
         try {
-            System.out.println("urlList: "+urlList);
-            url = new URL(urlList);
+            System.out.println("urlList: "+encodeValue(urlList));
+            url = new URL(encodeValue(urlList));
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
             FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
@@ -355,5 +356,19 @@ public class CoreServiceImpl implements CoreService {
             e.printStackTrace();
         }
     }
+
+    private static String encodeValue(String dirtyValue) {
+        String cleanValue = "";
+
+        try {
+            cleanValue = URLEncoder.encode(dirtyValue, "UTF-8").replace("+", "%20");
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return cleanValue;
+    }
+
 
 }
