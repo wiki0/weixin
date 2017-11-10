@@ -141,7 +141,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">09.33</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">06.37</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -266,8 +266,9 @@ public class CoreServiceImpl implements CoreService {
                     }
                 }
                 String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic(uremic)+".jpg";
+                System.out.println(picaddress);
                 article.setPicUrl(picaddress);
-                article.setDescription(safeSearchAnnotation.toString());
+                article.setDescription(safeSearchAnnotation.toString()+"\n\n"+picaddress);
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
                 newsMessage.setArticles(articleList);
