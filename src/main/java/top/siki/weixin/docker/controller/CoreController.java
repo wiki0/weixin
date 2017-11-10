@@ -11,8 +11,6 @@ import top.siki.weixin.docker.util.SignUtil;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -60,7 +58,7 @@ public class CoreController {
             outputStream.close();
             inputStream.close();
         } catch (IOException e) {
-// TODO Auto-generated catch block
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

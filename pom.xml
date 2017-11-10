@@ -6,7 +6,7 @@
 	<groupId>top.siki.weixin</groupId>
 	<artifactId>docker-weixin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>docker-weixin</name>
 	<description>Demo project for Spring Boot</description>
@@ -76,16 +76,6 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>3.8.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-			<version>3.8.0</version>
 		</dependency>
 	</dependencies>
 
