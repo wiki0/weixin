@@ -333,6 +333,7 @@ public class CoreServiceImpl implements CoreService {
     private static void downloadPicture(String urlList,String path) {
         URL url = null;
         try {
+            System.out.println("url: "+urlList);
             url = new URL(urlList);
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
