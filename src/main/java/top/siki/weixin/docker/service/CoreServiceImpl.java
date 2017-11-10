@@ -276,10 +276,8 @@ public class CoreServiceImpl implements CoreService {
                         uremic = object1.getAsJsonObject().get("url").toString();
                     }
                 }
-                System.out.println(uremic);
-                String picaddress = "http://www.wiki2link.top/"+ makepic(uremic)+".jpg";
+                String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic(uremic)+".jpg";
                 article.setPicUrl(picaddress);
-                System.out.println(picaddress);
                 article.setDescription(picaddress);
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
@@ -336,7 +334,7 @@ public class CoreServiceImpl implements CoreService {
         log.debug(geturl);
 
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String path="./src/main/resources/static/"+uuid+".jpg";
+        String path="/tmp/pic/"+uuid+".jpg";
         downloadPicture(geturl,path);
         return uuid;
     }

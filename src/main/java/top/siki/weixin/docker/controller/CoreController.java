@@ -8,7 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import top.siki.weixin.docker.service.CoreService;
 import top.siki.weixin.docker.util.SignUtil;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/")
@@ -38,4 +44,26 @@ public class CoreController {
         String respMessage = coreService.processRequest(req);
         return respMessage;
     }
+
+    @RequestMapping(value = "/api/show")
+    public void showPic(String path, HttpServletResponse response) {
+        response.setContentType("image/jpeg; charset=GBK");
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            FileInputStream inputStream = new FileInputStream("/tmp/pic/"+path);
+            byte[] buffer = new byte[1024];
+            int i = -1;
+            while ((i = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, i);
+            }
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+// TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
 }
