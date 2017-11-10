@@ -48,7 +48,7 @@ public class CoreController {
         response.setContentType("image/jpeg; charset=GBK");
         try {
             ServletOutputStream outputStream = response.getOutputStream();
-            FileInputStream inputStream = new FileInputStream("./src/main/resources/static/"+path);
+            FileInputStream inputStream = new FileInputStream("/tmp/"+path);
             byte[] buffer = new byte[1024];
             int i = -1;
             while ((i = inputStream.read(buffer)) != -1) {

@@ -1,9 +1,11 @@
 package top.siki.weixin.docker.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.client.RestTemplate;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import okhttp3.*;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
 import top.siki.weixin.docker.response.TextMessage;
@@ -25,14 +27,6 @@ import java.util.regex.Pattern;
  */
 @Service("coreService")
 public class CoreServiceImpl implements CoreService {
-
-    @Autowired
-    RestTemplate restTemplate;
-
-    // Restful服务对应的url地址
-    @Value("${service.picRec}")
-    private String picService;
-
 
     private static Logger log = LoggerFactory.getLogger(CoreServiceImpl.class);
 
@@ -225,56 +219,55 @@ public class CoreServiceImpl implements CoreService {
 //                String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac";
 //                JSONObject res = restTemplate.postForEntity(url, jsonObj, JSONObject.class).getBody();
 
-//                OkHttpClient client = new OkHttpClient();
-//
-//                MediaType mediaType = MediaType.parse("application/json");
-//                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":4},{\"type\":\"WEB_DETECTION\",\"maxResults\":1},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
-//                Request request2 = new Request.Builder()
-//                        .url("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac")
-//                        .post(body)
-//                        .addHeader("content-type", "application/json")
-//                        .addHeader("cache-control", "no-cache")
-//                        .addHeader("postman-token", "33546e9d-8c2a-fb75-e955-3be6796f0767")
-//                        .build();
-//
-//                Response response = client.newCall(request2).execute();
-//                String res = response.body().string();
-//                //先转JsonObject
-//                JsonObject jsonObject = new JsonParser().parse(res).getAsJsonObject();
-//                //再转JsonArray 加上数据头
-//                JsonArray jsonArray = jsonObject.getAsJsonArray("responses");
-//                JsonObject object = jsonArray.get(0).getAsJsonObject();
-//                JsonObject webDetection = object.get("webDetection").getAsJsonObject();
-//                JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
-//                //测试单图文回复
-//
-//                String uremic = "";
-                Article article = new Article();
-//                if (null != webDetection.get("fullMatchingImages")){
-//                    for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
-//                        article.setTitle("最佳匹配");
-//                        uremic = object1.getAsJsonObject().get("url").toString();
-//                    }
-//                }else if (null != webDetection.get("visuallySimilarImages")){
-//                    for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
-//                        article.setTitle("视觉相似");
-//                        uremic = object1.getAsJsonObject().get("url").toString();
-//                    }
-//                }else if (null != webDetection.get("pagesWithMatchingImages")){
-//                    for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
-//                        article.setTitle("可能出处");
-//                        uremic = object1.getAsJsonObject().get("url").toString();
-//                    }
-//                }else if (null != webDetection.get("partialMatchingImages")){
-//                    for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
-//                        article.setTitle("部分相似");
-//                        uremic = object1.getAsJsonObject().get("url").toString();
-//                    }
-//                }
+                OkHttpClient client = new OkHttpClient();
 
-                String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic("http://mmbiz.qpic.cn/mmbiz_jpg/gibVq5g3r8MGdTN52JONrFh0RN5ibJUHg6bTzFfwicGVIVR2qyj2LOlgQ6JGFNibTFtPDI7BxfdEXHgQcYpF7QTcdA/0")+".jpg";
+                MediaType mediaType = MediaType.parse("application/json");
+                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":4},{\"type\":\"WEB_DETECTION\",\"maxResults\":1},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
+                Request request2 = new Request.Builder()
+                        .url("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac")
+                        .post(body)
+                        .addHeader("content-type", "application/json")
+                        .addHeader("cache-control", "no-cache")
+                        .addHeader("postman-token", "33546e9d-8c2a-fb75-e955-3be6796f0767")
+                        .build();
+
+                Response response = client.newCall(request2).execute();
+                String res = response.body().string();
+                //先转JsonObject
+                JsonObject jsonObject = new JsonParser().parse(res).getAsJsonObject();
+                //再转JsonArray 加上数据头
+                JsonArray jsonArray = jsonObject.getAsJsonArray("responses");
+                JsonObject object = jsonArray.get(0).getAsJsonObject();
+                JsonObject webDetection = object.get("webDetection").getAsJsonObject();
+                JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
+                //测试单图文回复
+
+                String uremic = "";
+                Article article = new Article();
+                if (null != webDetection.get("fullMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
+                        article.setTitle("最佳匹配");
+                        uremic = object1.getAsJsonObject().get("url").toString();
+                    }
+                }else if (null != webDetection.get("visuallySimilarImages")){
+                    for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
+                        article.setTitle("视觉相似");
+                        uremic = object1.getAsJsonObject().get("url").toString();
+                    }
+                }else if (null != webDetection.get("pagesWithMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
+                        article.setTitle("可能出处");
+                        uremic = object1.getAsJsonObject().get("url").toString();
+                    }
+                }else if (null != webDetection.get("partialMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
+                        article.setTitle("部分相似");
+                        uremic = object1.getAsJsonObject().get("url").toString();
+                    }
+                }
+                String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic(uremic)+".jpg";
                 article.setPicUrl(picaddress);
-                article.setDescription(picaddress);
+                article.setDescription(safeSearchAnnotation.toString());
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
                 newsMessage.setArticles(articleList);
