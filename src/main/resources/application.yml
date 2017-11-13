@@ -1,2 +1,6 @@
 servet:
   port: 8080
+wechat:
+  mp:
+    appId: wxd84d3230eb686234
+    secret: 3997a7cc690500d61774312304b853dd

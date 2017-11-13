@@ -6,18 +6,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
 import top.siki.weixin.docker.response.TextMessage;
 import top.siki.weixin.docker.util.MessageUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +71,9 @@ public class CoreServiceImpl implements CoreService {
             newsMessage.setFuncFlag(0);
 
             List<Article> articleList = new ArrayList<Article>();
+
+            //点击菜单id
+            String EventKey =requestMap.get("EventKey");
             // 接收文本消息内容
             String content = requestMap.get("Content");
             // 自动回复文本消息
@@ -140,8 +144,13 @@ public class CoreServiceImpl implements CoreService {
                         }
 
                         case "00": {
+                            File f = new File("/app.jar");
+                            Calendar cal = Calendar.getInstance();
+                            long time = f.lastModified();
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            cal.setTimeInMillis(time);
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">11.20/a>";
+                            respContent = formatter.format(cal.getTime());
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -277,7 +286,7 @@ public class CoreServiceImpl implements CoreService {
                 repbody.append("包含内容:\n\n");
                 for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
                     repbody.append("des: "+object1.getAsJsonObject().get("description").getAsString()+" like: ");
-                    repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n");
+                    repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n\n");
                 }
                 if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
                     repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
@@ -313,6 +322,75 @@ public class CoreServiceImpl implements CoreService {
                 textMessage.setContent(respContent);
                 // 将文本消息对象转换成xml字符串
                 respMessage = MessageUtil.textMessageToXml(textMessage);
+            }
+
+            // 事件推送
+            else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
+                // 事件类型
+                String eventType =requestMap.get("Event");
+                // 自定义菜单点击事件
+                if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
+                    switch (EventKey){
+                        case "11":{
+                            respContent = "这是第一栏第一个";
+                            break;
+                        }
+                        case "12":{
+                            respContent = "这是第一栏第一个";
+                            break;
+                        }
+                        case "21":{
+                            respContent = "这是第二栏第一个";
+                            break;
+                        }
+
+                        default:{
+                            log.error("开发者反馈：EventKey值没找到，它是:"+EventKey);
+                            respContent= "很抱歉，此按键功能正在升级无法使用";
+                        }
+                    }
+                    textMessage.setContent(respContent);
+                    // 将文本消息对象转换成xml字符串
+                    respMessage = MessageUtil.textMessageToXml(textMessage);
+                }
+                else if(eventType.equals(MessageUtil.EVENT_TYPE_VIEW)){
+                    // 对于点击菜单转网页暂时不做推送
+                }
+
+                // 订阅
+                else if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
+                    //测试单图文回复
+                    Article article = new Article();
+                    article.setTitle("谢谢您的关注！");
+                    // 图文消息中可以使用QQ表情、符号表情
+                    article.setDescription("点击图文可以跳转到百度首页");
+                    // 将图片置为空
+                    article.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
+                    article.setUrl("http://www.baidu.com");
+                    articleList.add(article);
+                    newsMessage.setArticleCount(articleList.size());
+                    newsMessage.setArticles(articleList);
+                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+                }
+                else if(eventType.equals(MessageUtil.EVENT_TYPE_SCAN)){
+                    //测试单图文回复
+                    Article article = new Article();
+                    article.setTitle("这是已关注用户扫描二维码弹到的界面");
+                    // 图文消息中可以使用QQ表情、符号表情
+                    article.setDescription("点击图文可以跳转到百度首页");
+                    // 将图片置为空
+                    article.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
+                    article.setUrl("http://www.baidu.com");
+                    articleList.add(article);
+                    newsMessage.setArticleCount(articleList.size());
+                    newsMessage.setArticles(articleList);
+                    respMessage = MessageUtil.newsMessageToXml(newsMessage);
+                }
+                // 取消订阅
+                else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
+                    // TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

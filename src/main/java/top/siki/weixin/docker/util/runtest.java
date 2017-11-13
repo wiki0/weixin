@@ -5,6 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class runtest {
 
     public static void main(String[] args) {
@@ -24,6 +28,11 @@ public class runtest {
                 System.out.println(object1.getAsJsonObject().get("description").getAsString());
             }
         }
-
+        File f = new File("C:\\test.txt");
+        Calendar cal = Calendar.getInstance();
+        long time = f.lastModified();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        cal.setTimeInMillis(time);
+        System.out.println("修改时间[2] " + formatter.format(cal.getTime()));
     }
 }
