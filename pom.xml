@@ -6,7 +6,7 @@
 	<groupId>top.siki.weixin</groupId>
 	<artifactId>docker-weixin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>docker-weixin</name>
 	<description>Demo project for Spring Boot</description>

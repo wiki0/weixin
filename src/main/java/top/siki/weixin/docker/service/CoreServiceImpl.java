@@ -141,7 +141,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">12.12</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">11.20/a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -249,9 +249,9 @@ public class CoreServiceImpl implements CoreService {
                         article.setTitle("最佳匹配");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
-                }else if (null != webDetection.get("visuallySimilarImages")){
-                    for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
-                        article.setTitle("视觉相似");
+                }else if (null != webDetection.get("partialMatchingImages")){
+                    for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
+                        article.setTitle("部分相似");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("pagesWithMatchingImages")){
@@ -259,9 +259,9 @@ public class CoreServiceImpl implements CoreService {
                         article.setTitle("可能出处");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
-                }else if (null != webDetection.get("partialMatchingImages")){
-                    for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
-                        article.setTitle("部分相似");
+                }else if (null != webDetection.get("visuallySimilarImages")){
+                    for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
+                        article.setTitle("视觉相似");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }
@@ -271,9 +271,18 @@ public class CoreServiceImpl implements CoreService {
                 article.setUrl(uremic);
 
                 StringBuilder repbody = new StringBuilder();
+                String adult = safeSearchAnnotation.getAsJsonObject().get("adult").getAsString();
+                String spoof = safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString();
+                String violence = safeSearchAnnotation.getAsJsonObject().get("violence").getAsString();
+                if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
                 repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
+
+                if ("POSSIBLE".equals(spoof) || "LIKELY".equals(spoof) || "VERY_LIKELY".equals(spoof))
                 repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString()));
+
+                if ("POSSIBLE".equals(violence) || "LIKELY".equals(violence) || "VERY_LIKELY".equals(violence))
                 repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString()));
+
                 repbody.append("\n\n包含内容:\n\n");
                 for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
                     repbody.append("des: "+object1.getAsJsonObject().get("description").getAsString()+" like: ");

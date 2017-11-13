@@ -1,27 +1,27 @@
-#FROM registry.ap-southeast-1.aliyuncs.com/wiki0/java:8
-#VOLUME /tmp
-#ADD ./target/docker-weixin-0.0.1-SNAPSHOT.jar app.jar
-##RUN bash -c 'touch /app.jar'ls
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-#
-#EXPOSE 8080
-
-
-FROM  registry.ap-southeast-1.aliyuncs.com/wiki0/tomcat8:latest
-# add war in webapps
-ADD ./target/docker-weixin-0.0.1-SNAPSHOT.war /tmp
-
-RUN cd /usr/local/tomcat8/webapps/ \
-        #拷贝编译结果到指定目录
-        && rm -rf ./* \
-        && mv /tmp/*.war ./ROOT.war
-
+FROM registry.ap-southeast-1.aliyuncs.com/wiki0/java:8
 VOLUME /tmp
-# container listener port
+ADD ./target/docker-weixin-0.0.1-SNAPSHOT.jar app.jar
+#RUN bash -c 'touch /app.jar'ls
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
 EXPOSE 8080
 
-# startup wev application services by self
-CMD ["catalina.sh", "run"]
+
+#FROM  registry.ap-southeast-1.aliyuncs.com/wiki0/tomcat8:latest
+## add war in webapps
+#ADD ./target/docker-weixin-0.0.1-SNAPSHOT.war /tmp
+#
+#RUN cd /usr/local/tomcat8/webapps/ \
+#        #拷贝编译结果到指定目录
+#        && rm -rf ./* \
+#        && mv /tmp/*.war ./ROOT.war
+#
+#VOLUME /tmp
+## container listener port
+#EXPOSE 8080
+#
+## startup wev application services by self
+#CMD ["catalina.sh", "run"]
 
 #FROM maven:3.3.3
 #
