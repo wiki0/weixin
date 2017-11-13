@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -142,7 +141,7 @@ public class CoreServiceImpl implements CoreService {
 
                         case "00": {
                             //测试网址回复
-                            respContent = "<a href=\"http://www.wiki2link.cn\">11.11</a>";
+                            respContent = "<a href=\"http://www.wiki2link.cn\">12.12</a>";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
@@ -248,28 +247,40 @@ public class CoreServiceImpl implements CoreService {
                 if (null != webDetection.get("fullMatchingImages")){
                     for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
                         article.setTitle("最佳匹配");
-                        uremic = object1.getAsJsonObject().get("url").toString();
+                        uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("visuallySimilarImages")){
                     for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
                         article.setTitle("视觉相似");
-                        uremic = object1.getAsJsonObject().get("url").toString();
+                        uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("pagesWithMatchingImages")){
                     for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
                         article.setTitle("可能出处");
-                        uremic = object1.getAsJsonObject().get("url").toString();
+                        uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("partialMatchingImages")){
                     for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
                         article.setTitle("部分相似");
-                        uremic = object1.getAsJsonObject().get("url").toString();
+                        uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }
                 String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic(uremic)+".jpg";
-                System.out.println(picaddress);
-                article.setPicUrl(picaddress);
-                article.setDescription(safeSearchAnnotation.toString()+"\n\n"+picaddress);
+                article.setPicUrl(picaddress);//本地显示
+                //原地址
+                article.setUrl(uremic);
+
+                StringBuilder repbody = new StringBuilder();
+                repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
+                repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString()));
+                repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString()));
+                repbody.append("\n\n包含内容: ");
+                for (JsonElement object1 : object.get("labelAnnotations").getAsJsonArray()){
+                    repbody.append(object1.getAsJsonObject().get("description").getAsString()+"  ");
+                    repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n\n");
+                }
+
+                article.setDescription(repbody.toString());
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
                 newsMessage.setArticles(articleList);
@@ -321,9 +332,27 @@ public class CoreServiceImpl implements CoreService {
         return result;
     }
 
-    public static String makepic(String geturl) throws Exception {
-        System.out.println("geturl: "+geturl);
+    public static String toCn(String content) {
+        String result = content;
 
+        // 判断可能性
+        if ("UNKNOWN".equals(content)) {
+            result = "未知的";
+        }else if ("UNLIKELY".equals(content)) {
+            result = "不太像";
+        }else if ("VERY_UNLIKELY".equals(content)) {
+            result = "非常不像";
+        }else if ("POSSIBLE".equals(content)) {
+            result = "可能的";
+        }else if ("LIKELY".equals(content)) {
+            result = "很像";
+        }else if ("VERY_LIKELY".equals(content)) {
+            result = "非常像";
+        }
+        return result;
+    }
+
+    public static String makepic(String geturl) throws Exception {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String path="/tmp/"+uuid+".jpg";
         downloadPicture(geturl,path);
@@ -334,8 +363,7 @@ public class CoreServiceImpl implements CoreService {
     private static void downloadPicture(String urlList,String path) {
         URL url = null;
         try {
-            System.out.println("urlList: "+urlList.replaceAll("\"",""));
-            url = new URL(urlList.replaceAll("\"",""));
+            url = new URL(urlList);
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
             FileOutputStream fileOutputStream = new FileOutputStream(new File(path));
@@ -356,5 +384,7 @@ public class CoreServiceImpl implements CoreService {
             e.printStackTrace();
         }
     }
+
+
 
 }
