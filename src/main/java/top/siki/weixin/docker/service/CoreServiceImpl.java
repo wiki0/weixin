@@ -222,7 +222,7 @@ public class CoreServiceImpl implements CoreService {
                 OkHttpClient client = new OkHttpClient();
 
                 MediaType mediaType = MediaType.parse("application/json");
-                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":4},{\"type\":\"WEB_DETECTION\",\"maxResults\":1},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
+                RequestBody body = RequestBody.create(mediaType, "{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\""+picUrl+"\"}},\"features\":[{\"type\":\"WEB_DETECTION\",\"maxResults\":5},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
                 Request request2 = new Request.Builder()
                         .url("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac")
                         .post(body)
@@ -274,12 +274,11 @@ public class CoreServiceImpl implements CoreService {
                 repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
                 repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString()));
                 repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString()));
-                repbody.append("\n\n包含内容: ");
-                for (JsonElement object1 : object.get("labelAnnotations").getAsJsonArray()){
-                    repbody.append(object1.getAsJsonObject().get("description").getAsString()+"  ");
+                repbody.append("\n\n包含内容:\n\n");
+                for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
+                    repbody.append("des: "+object1.getAsJsonObject().get("description").getAsString()+" like: ");
                     repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n\n");
                 }
-
                 article.setDescription(repbody.toString());
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
@@ -341,7 +340,7 @@ public class CoreServiceImpl implements CoreService {
         }else if ("UNLIKELY".equals(content)) {
             result = "不太像";
         }else if ("VERY_UNLIKELY".equals(content)) {
-            result = "非常不像";
+            result = "不可能";
         }else if ("POSSIBLE".equals(content)) {
             result = "可能的";
         }else if ("LIKELY".equals(content)) {

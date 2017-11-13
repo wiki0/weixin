@@ -15,13 +15,13 @@ public class runtest {
         //再转JsonArray 加上数据头
         JsonArray jsonArray = jsonObject.getAsJsonArray("responses");
         JsonObject object = jsonArray.get(0).getAsJsonObject();
-//        JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
-//        System.out.println(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString());
+        JsonObject webDetection = object.get("webDetection").getAsJsonObject();
+        JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
+        System.out.println(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString());
 
-        if (null != object.get("labelAnnotations")){
-            for (JsonElement object1 : object.get("labelAnnotations").getAsJsonArray()){
+        if (null != webDetection.get("webEntities")){
+            for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
                 System.out.println(object1.getAsJsonObject().get("description").getAsString());
-                System.out.println(object1.getAsJsonObject().get("score").getAsString().substring(0,4));
             }
         }
 
