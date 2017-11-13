@@ -246,22 +246,22 @@ public class CoreServiceImpl implements CoreService {
                 Article article = new Article();
                 if (null != webDetection.get("fullMatchingImages")){
                     for (JsonElement object1 : webDetection.get("fullMatchingImages").getAsJsonArray()){
-                        article.setTitle("最佳匹配");
+                        article.setTitle("最佳匹配(确定)");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("partialMatchingImages")){
                     for (JsonElement object1 : webDetection.get("partialMatchingImages").getAsJsonArray()){
-                        article.setTitle("部分相似");
+                        article.setTitle("部分相似(大概)");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("pagesWithMatchingImages")){
                     for (JsonElement object1 : webDetection.get("pagesWithMatchingImages").getAsJsonArray()){
-                        article.setTitle("可能出处");
+                        article.setTitle("可能出处(不确定)");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }else if (null != webDetection.get("visuallySimilarImages")){
                     for (JsonElement object1 : webDetection.get("visuallySimilarImages").getAsJsonArray()){
-                        article.setTitle("视觉相似");
+                        article.setTitle("视觉相似(猜的)");
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }
@@ -274,20 +274,19 @@ public class CoreServiceImpl implements CoreService {
                 String adult = safeSearchAnnotation.getAsJsonObject().get("adult").getAsString();
                 String spoof = safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString();
                 String violence = safeSearchAnnotation.getAsJsonObject().get("violence").getAsString();
-                if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
-                repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
-
-                if ("POSSIBLE".equals(spoof) || "LIKELY".equals(spoof) || "VERY_LIKELY".equals(spoof))
-                repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString()));
-
-                if ("POSSIBLE".equals(violence) || "LIKELY".equals(violence) || "VERY_LIKELY".equals(violence))
-                repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString()));
-
-                repbody.append("\n\n包含内容:\n\n");
+                repbody.append("包含内容:\n\n");
                 for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
                     repbody.append("des: "+object1.getAsJsonObject().get("description").getAsString()+" like: ");
-                    repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n\n");
+                    repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n");
                 }
+                if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
+                    repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
+
+                if ("POSSIBLE".equals(spoof) || "LIKELY".equals(spoof) || "VERY_LIKELY".equals(spoof))
+                    repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString()));
+
+                if ("POSSIBLE".equals(violence) || "LIKELY".equals(violence) || "VERY_LIKELY".equals(violence))
+                    repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString()));
                 article.setDescription(repbody.toString());
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());
