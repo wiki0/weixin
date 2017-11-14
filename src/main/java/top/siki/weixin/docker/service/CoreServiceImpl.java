@@ -284,20 +284,22 @@ public class CoreServiceImpl implements CoreService {
                 String adult = safeSearchAnnotation.getAsJsonObject().get("adult").getAsString();
                 String spoof = safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString();
                 String violence = safeSearchAnnotation.getAsJsonObject().get("violence").getAsString();
+
+                if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
+                    repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString())+"\n\n");
+
+                if ("POSSIBLE".equals(spoof) || "LIKELY".equals(spoof) || "VERY_LIKELY".equals(spoof))
+                    repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString())+"\n\n");
+
+                if ("POSSIBLE".equals(violence) || "LIKELY".equals(violence) || "VERY_LIKELY".equals(violence))
+                    repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString())+"\n\n");
+
                 repbody.append("包含内容:\n\n");
                 for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
                     repbody.append("des: "+object1.getAsJsonObject().get("description").getAsString()+" like: ");
                     repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n\n");
                 }
-                repbody.deleteCharAt(repbody.length()-4);
-                if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
-                    repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
-
-                if ("POSSIBLE".equals(spoof) || "LIKELY".equals(spoof) || "VERY_LIKELY".equals(spoof))
-                    repbody.append(" 恶搞: "+toCn(safeSearchAnnotation.getAsJsonObject().get("spoof").getAsString()));
-
-                if ("POSSIBLE".equals(violence) || "LIKELY".equals(violence) || "VERY_LIKELY".equals(violence))
-                    repbody.append(" 暴力: "+toCn(safeSearchAnnotation.getAsJsonObject().get("violence").getAsString()));
+                repbody.delete(repbody.length()-4,repbody.length());
                 article.setDescription(repbody.toString());
                 articleList.add(article);
                 newsMessage.setArticleCount(articleList.size());

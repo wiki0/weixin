@@ -5,10 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 public class runtest {
 
     public static void main(String[] args) {
@@ -23,16 +19,17 @@ public class runtest {
         JsonObject safeSearchAnnotation = object.get("safeSearchAnnotation").getAsJsonObject();
         System.out.println(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString());
 
+        StringBuilder builder = new StringBuilder();
+        builder.append("aaa");
+        builder.append("\n\n");
+        builder.append("bbbb");
+        builder.delete(builder.length()-4,builder.length());
+        System.out.println(builder.toString());
         if (null != webDetection.get("webEntities")){
             for (JsonElement object1 : webDetection.get("webEntities").getAsJsonArray()){
                 System.out.println(object1.getAsJsonObject().get("description").getAsString());
             }
         }
-        File f = new File("C:\\test.txt");
-        Calendar cal = Calendar.getInstance();
-        long time = f.lastModified();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        cal.setTimeInMillis(time);
-        System.out.println("修改时间[2] " + formatter.format(cal.getTime()));
+
     }
 }
