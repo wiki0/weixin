@@ -2,10 +2,8 @@ package top.siki.weixin.docker.thread;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import top.siki.weixin.docker.repuest.AccessToken;
-import top.siki.weixin.docker.util.WeixinUtil;
 
 /**
  * 定时获取微信access_token的线程
@@ -24,14 +22,14 @@ public class AccessTokenThread {
     // 第三方用户唯一凭证
     public static AccessToken accessToken = null;
 
-    @Scheduled(fixedDelay = 2*3600*1000)
-    //7200秒执行一次
-    public void gettoken(){
-        accessToken= WeixinUtil.getAccessToken(appid,appsecret);
-        if(null!=accessToken){
-            log.info("获取成功，accessToken:"+accessToken.getToken());
-        }else {
-            log.error("获取token失败");
-        }
-    }
+//    @Scheduled(fixedDelay = 2*3600*1000)
+//    //7200秒执行一次
+//    public void gettoken(){
+//        accessToken= WeixinUtil.getAccessToken(appid,appsecret);
+//        if(null!=accessToken){
+//            log.info("获取成功，accessToken:"+accessToken.getToken());
+//        }else {
+//            log.error("获取token失败");
+//        }
+//    }
 }

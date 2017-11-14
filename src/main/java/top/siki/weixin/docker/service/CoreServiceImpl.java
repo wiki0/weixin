@@ -274,6 +274,7 @@ public class CoreServiceImpl implements CoreService {
                         uremic = object1.getAsJsonObject().get("url").getAsString();
                     }
                 }
+
                 String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic(uremic)+".jpg";
                 article.setPicUrl(picaddress);//本地显示
                 //原地址
@@ -288,6 +289,7 @@ public class CoreServiceImpl implements CoreService {
                     repbody.append("des: "+object1.getAsJsonObject().get("description").getAsString()+" like: ");
                     repbody.append(object1.getAsJsonObject().get("score").getAsString().substring(0,4)+"\n\n");
                 }
+                repbody.deleteCharAt(repbody.length()-4);
                 if ("POSSIBLE".equals(adult) || "LIKELY".equals(adult) || "VERY_LIKELY".equals(adult))
                     repbody.append("成人: "+toCn(safeSearchAnnotation.getAsJsonObject().get("adult").getAsString()));
 
