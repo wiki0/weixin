@@ -37,6 +37,7 @@ public class CoreServiceImpl implements CoreService {
      * @param request
      * @return
      */
+    @Override
     public  String processRequest(HttpServletRequest request) {
 
         String respMessage = null;
@@ -159,6 +160,7 @@ public class CoreServiceImpl implements CoreService {
                         }
 
                         default: {
+                            log.info("{} 用户发送了:{}",fromUserName,content);
                             respContent = "很抱歉，时无法提供此功能给您使用。\n\n回复“1”显示帮助信息";
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
@@ -394,6 +396,7 @@ public class CoreServiceImpl implements CoreService {
                 // 取消订阅
                 else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
                     // TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+                    log.info("{} 用户取消订阅", fromUserName);
                 }
 
             }
