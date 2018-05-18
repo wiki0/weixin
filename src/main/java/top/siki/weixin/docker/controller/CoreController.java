@@ -1,8 +1,7 @@
 package top.siki.weixin.docker.controller;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,12 +18,11 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/")
+@Slf4j
 public class CoreController {
     @Autowired
     private CoreService coreService;
 
-    //增加日志
-    private static Logger log = LoggerFactory.getLogger(CoreController.class);
     //验证是否来自微信服务器的消息
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String checkSignature(@RequestParam(name = "signature" ,required = false) String signature  ,
