@@ -147,10 +147,11 @@ public class CoreServiceImpl implements CoreService {
                             File f = new File("/app.jar");
                             Calendar cal = Calendar.getInstance();
                             long time = f.lastModified();
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             cal.setTimeInMillis(time);
+                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
+                            sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
                             //测试网址回复
-                            respContent = formatter.format(cal.getTime());
+                            respContent = sdf.format(cal.getTime());
                             textMessage.setContent(respContent);
                             // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
