@@ -57,7 +57,7 @@ public class CoreServiceImpl implements CoreService {
             TextMessage textMessage = new TextMessage();
             textMessage.setToUserName(fromUserName);
             textMessage.setFromUserName(toUserName);
-            textMessage.setCreateTime(new Date().getTime());
+            textMessage.setCreateTime(getBeforeHourTime(0).getTime());
             textMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
             textMessage.setFuncFlag(0);
 
@@ -66,7 +66,7 @@ public class CoreServiceImpl implements CoreService {
             NewsMessage newsMessage = new NewsMessage();
             newsMessage.setToUserName(fromUserName);
             newsMessage.setFromUserName(toUserName);
-            newsMessage.setCreateTime(new Date().getTime());
+            newsMessage.setCreateTime(getBeforeHourTime(0).getTime());
             newsMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
             newsMessage.setFuncFlag(0);
 
@@ -474,6 +474,17 @@ public class CoreServiceImpl implements CoreService {
         }
     }
 
+    /**
+     * 获取几小时前的时间
+     *
+     */
+    public Date getBeforeHourTime(int ihour){
 
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - ihour);
+        return calendar.getTime();
+    }
 
 }
