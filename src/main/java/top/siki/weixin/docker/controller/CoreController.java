@@ -29,10 +29,6 @@ public class CoreController {
 
     /**
      * 验证是否来自微信服务器的消息
-     * @param signature
-     * @param nonce
-     * @param timestamp
-     * @param echostr
      * @return
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
