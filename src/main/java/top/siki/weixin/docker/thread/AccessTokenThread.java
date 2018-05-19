@@ -7,7 +7,7 @@ import top.siki.weixin.docker.repuest.AccessToken;
 
 /**
  * 定时获取微信access_token的线程
- *在WechatMpDemoApplication中注解@EnableScheduling，在程序启动时就开启定时任务。
+ * 在WechatMpDemoApplication中注解@EnableScheduling，在程序启动时就开启定时任务。
  * 每7200秒执行一次
  */
 @Component

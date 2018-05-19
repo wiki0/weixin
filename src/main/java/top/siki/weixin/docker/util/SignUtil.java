@@ -5,7 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class SignUtil {
-    // 与接口配置信息中的Token要一致
+    /**
+     * 与接口配置信息中的Token要一致
+     */
     private static String token = "wiki2link";
 
     /**

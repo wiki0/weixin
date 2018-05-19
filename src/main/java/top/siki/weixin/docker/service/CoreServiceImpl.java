@@ -5,9 +5,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
@@ -26,10 +25,10 @@ import java.util.regex.Pattern;
 /**
  * 核心服务类
  */
+@Slf4j
 @Service("coreService")
 public class CoreServiceImpl implements CoreService {
 
-    private static Logger log = LoggerFactory.getLogger(CoreServiceImpl.class);
 
     /**
      * 处理微信发来的请求（包括事件的推送）

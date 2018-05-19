@@ -23,10 +23,18 @@ import java.io.IOException;
 @RequestMapping("/")
 @Slf4j
 public class CoreController {
+
     @Autowired
     private CoreService coreService;
 
-    //验证是否来自微信服务器的消息
+    /**
+     * 验证是否来自微信服务器的消息
+     * @param signature
+     * @param nonce
+     * @param timestamp
+     * @param echostr
+     * @return
+     */
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String checkSignature(@RequestParam(name = "signature" ,required = false) String signature  ,
                                  @RequestParam(name = "nonce",required = false) String  nonce ,
@@ -40,7 +48,12 @@ public class CoreController {
         log.error("接入失败");
         return "";
     }
-    // 调用核心业务类接收消息、处理消息跟推送消息
+
+    /**
+     *  调用核心业务类接收消息、处理消息跟推送消息
+     * @param req
+     * @return
+     */
     @RequestMapping(value = "",method = RequestMethod.POST)
     public  String post(HttpServletRequest req){
         String respMessage = coreService.processRequest(req);

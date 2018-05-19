@@ -1,18 +1,18 @@
 package top.siki.weixin.docker.repuest;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 文本消息
  *
  */
+@Getter
+@Setter
 public class TextMessage extends BaseMessage {
-    // 消息内容
-    private String Content;
-
-    public String getContent() {
-        return Content;
-    }
-
-    public void setContent(String content) {
-        Content = content;
-    }
+    /**
+     * 消息内容
+     *
+     */
+    private String content;
 }

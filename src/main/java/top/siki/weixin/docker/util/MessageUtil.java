@@ -104,13 +104,12 @@ public class MessageUtil {
 
     /**
      * 解析微信发来的请求（XML）
-     *
+     * 屏蔽某些编译时的警告信息(在强制类型转换的时候编译器会给出警告)
      * @param request
      * @return
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    //屏蔽某些编译时的警告信息(在强制类型转换的时候编译器会给出警告)
     public static Map<String, String> parseXml(HttpServletRequest request) throws Exception {
         // 将解析结果存储在HashMap中
         Map<String, String> map = new HashMap<String, String>();
@@ -126,8 +125,9 @@ public class MessageUtil {
         List<Element> elementList = root.elements();
 
         // 遍历所有子节点
-        for (Element e : elementList)
+        for (Element e : elementList) {
             map.put(e.getName(), e.getText());
+        }
 
         // 释放资源
         inputStream.close();
@@ -166,12 +166,13 @@ public class MessageUtil {
      * @date 2013-05-19
      */
     private static XStream xstream = new XStream(new XppDriver() {
+        @Override
+        @SuppressWarnings("unchecked")
         public HierarchicalStreamWriter createWriter(Writer out) {
             return new PrettyPrintWriter(out) {
                 // 对所有xml节点的转换都增加CDATA标记
                 boolean cdata = true;
 
-                @SuppressWarnings("unchecked")
                 public void startNode(String name, Class clazz) {
                     super.startNode(name, clazz);
                 }

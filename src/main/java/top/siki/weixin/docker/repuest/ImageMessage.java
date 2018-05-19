@@ -1,18 +1,18 @@
 package top.siki.weixin.docker.repuest;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 图片消息
- *
+ * @author admin
  */
+@Getter
+@Setter
 public class ImageMessage extends BaseMessage {
-    // 图片链接
-    private String PicUrl;
+    /**
+     * 图片链接
+      */
+    private String picUrl;
 
-    public String getPicUrl() {
-        return PicUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        PicUrl = picUrl;
-    }
 }
