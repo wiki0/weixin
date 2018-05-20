@@ -13,22 +13,22 @@ public class BaseMessage {
     /**
      * 接收方帐号（收到的OpenID）
      */
-    private String toUserName;
+    private String ToUserName;
     /**
      *  开发者微信号
      */
-    private String fromUserName;
+    private String FromUserName;
     /**
      * 消息创建时间 （整型）
      */
-    private long createTime;
+    private long CreateTime;
     /**
      * 消息类型（text/music/news）
      */
-    private String msgType;
+    private String MsgType;
     /**
      * 位0x0001被标志时，星标刚收到的消息
      */
-    private int funcFlag;
+    private int FuncFlag;
 
 }

@@ -46,13 +46,13 @@ public class CoreServiceImpl implements CoreService {
             // xml请求解析
             Map<String, String> requestMap = MessageUtil.parseXml(request);
             // 发送方帐号（open_id）
-            String fromUserName = requestMap.get("FromUserName");
+            String fromUserName = requestMap.get("fromUserName");
             // 公众帐号
-            String toUserName = requestMap.get("ToUserName");
+            String toUserName = requestMap.get("toUserName");
             // 消息类型
-            String msgType = requestMap.get("MsgType");
+            String msgType = requestMap.get("msgType");
             //图片地址
-            String picUrl = requestMap.get("PicUrl");
+            String picUrl = requestMap.get("picUrl");
             // 回复文本消息
             TextMessage textMessage = new TextMessage();
             textMessage.setToUserName(fromUserName);
@@ -73,7 +73,7 @@ public class CoreServiceImpl implements CoreService {
             List<Article> articleList = new ArrayList<Article>();
 
             //点击菜单id
-            String EventKey =requestMap.get("EventKey");
+            String eventKey =requestMap.get("EventKey");
             // 接收文本消息内容
             String content = requestMap.get("Content");
             // 自动回复文本消息
@@ -336,7 +336,7 @@ public class CoreServiceImpl implements CoreService {
                 String eventType =requestMap.get("Event");
                 // 自定义菜单点击事件
                 if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
-                    switch (EventKey){
+                    switch (eventKey){
                         case "11":{
                             respContent = "这是第一栏第一个";
                             break;
@@ -351,7 +351,7 @@ public class CoreServiceImpl implements CoreService {
                         }
 
                         default:{
-                            log.error("开发者反馈：EventKey值没找到，它是:"+EventKey);
+                            log.error("开发者反馈：EventKey值没找到，它是:"+eventKey);
                             respContent= "很抱歉，此按键功能正在升级无法使用";
                         }
                     }
