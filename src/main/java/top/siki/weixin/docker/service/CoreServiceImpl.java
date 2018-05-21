@@ -127,7 +127,7 @@ public class CoreServiceImpl implements CoreService {
                         .addHeader("postman-token", "33546e9d-8c2a-fb75-e955-3be6796f0767")
                         .build();
                 Response response = client.newCall(request2).execute();
-                String res = response.body().toString();
+                String res = response.body().string();
                 //先转JsonObject
                 JsonObject jsonObject = new JsonParser().parse(res).getAsJsonObject();
                 //再转JsonArray 加上数据头
