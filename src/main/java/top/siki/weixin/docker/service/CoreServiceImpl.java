@@ -71,25 +71,20 @@ public class CoreServiceImpl implements CoreService {
             newsMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
             newsMessage.setFuncFlag(0);
 
-            List<Article> articleList = new ArrayList<Article>();
+            List<Article> articleList = new ArrayList<>();
 
-            //点击菜单id
-            String eventKey =requestMap.get("EventKey");
             // 接收文本消息内容
             String content = requestMap.get("Content");
             // 自动回复文本消息
             if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
-
                 //如果用户发送表情，则回复同样表情。
                 if (isQqFace(content)) {
                     respContent = content;
                     textMessage.setContent(respContent);
-                    // 将文本消息对象转换成xml字符串
                     respMessage = MessageUtil.textMessageToXml(textMessage);
                 } else {
                     //回复固定消息
                     switch (content) {
-
                         case "1": {
                             StringBuffer buffer = new StringBuffer();
                             buffer.append("测试：发送图片获得描述").append("\n\n");
@@ -98,21 +93,6 @@ public class CoreServiceImpl implements CoreService {
                             respContent = String.valueOf(buffer);
                             textMessage.setContent(respContent);
                             respMessage = MessageUtil.textMessageToXml(textMessage);
-                            break;
-                        }
-                        case "11": {
-                            //测试单图文回复
-                            Article article = new Article();
-                            article.setTitle("微信公众帐号开发教程Java版");
-                            // 图文消息中可以使用QQ表情、符号表情
-                            article.setDescription("这是测试有没有换行\n\n如果有空行就代表换行成功\n\n点击图文可以跳转到百度首页");
-                            // 将图片置为空
-                            article.setPicUrl("http://www.sinaimg.cn/dy/slidenews/31_img/2016_38/28380_733695_698372.jpg");
-                            article.setUrl("http://www.baidu.com");
-                            articleList.add(article);
-                            newsMessage.setArticleCount(articleList.size());
-                            newsMessage.setArticles(articleList);
-                            respMessage = MessageUtil.newsMessageToXml(newsMessage);
                             break;
                         }
                         case "12": {
@@ -145,16 +125,15 @@ public class CoreServiceImpl implements CoreService {
                         }
 
                         case "00": {
+                            //查询更新版本
                             File f = new File("/app.jar");
                             Calendar cal = Calendar.getInstance();
                             long time = f.lastModified();
                             cal.setTimeInMillis(time);
                             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
                             sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
-                            //测试网址回复
                             respContent = sdf.format(cal.getTime());
                             textMessage.setContent(respContent);
-                            // 将文本消息对象转换成xml字符串
                             respMessage = MessageUtil.textMessageToXml(textMessage);
                             break;
                         }
@@ -171,66 +150,6 @@ public class CoreServiceImpl implements CoreService {
             }
             // 图片消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
-//                InetAddress ip= InetAddress.getByName(this.picService);
-//                String url = "http://"+ip.getHostAddress()+"/im2txt?url=" + picUrl;
-//                String quote = restTemplate.getForObject(url, String.class);
-//                JSONObject json = new JSONObject(quote);
-//                JSONArray jsonArray = json.getJSONArray("results");
-//                StringBuilder rep = new StringBuilder();
-//                for (int i = 0; i < jsonArray.length(); i++) {
-//                    JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-//                    Double num = jsonObject2.getDouble("probability");
-//                    String talk =  jsonObject2.getString("sentence");
-//                    rep.append(talk +" "+num+"%可能性\n");
-//                }
-//                respContent = rep.toString();
-
-//                HttpHeaders headers = new HttpHeaders();
-//                MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
-//                headers.setContentType(type);
-//                headers.add("Accept", MediaType.APPLICATION_JSON.toString());
-
-
-//                StringBuilder stringBuilder = new StringBuilder();
-//                stringBuilder.append("{\"requests\":[{\"image\":{\"source\":{\"imageUri\":\"");
-//                stringBuilder.append(picUrl);
-//                stringBuilder.append("\"}},\"features\":[{\"type\":\"LABEL_DETECTION\",\"maxResults\":2},{\"type\":\"WEB_DETECTION\",\"maxResults\":3},{\"type\":\"SAFE_SEARCH_DETECTION\"}]}]}");
-//                JsonObject jsonObj = new JsonParser().parse(stringBuilder.toString()).getAsJsonObject();
-
-//                JSONObject jsonObj = new JSONObject();
-//                JSONObject  requests = new JSONObject();
-//
-//                JSONObject image = new JSONObject();
-//                JSONObject source = new JSONObject();
-//                source.put("imageUri",picUrl);
-//                image.put("source",source);
-//                requests.put("image",image);
-//
-//                JSONArray features = new JSONArray();
-//                JSONObject object1 = new JSONObject();
-//                object1.put("type","SAFE_SEARCH_DETECTION");
-//                features.put(object1);
-//                JSONObject object2 = new JSONObject();
-//                object2.put("type","LABEL_DETECTION");
-//                object2.put("maxResults",2);
-//                features.put(object2);
-//                JSONObject object3 = new JSONObject();
-//                object3.put("type","WEB_DETECTION");
-//                object3.put("maxResults",3);
-//                features.put(object3);
-//                requests.put("features",features);
-//
-//
-//                jsonObj.put("requests",requests);
-
-//                log.info(jsonObj.toString());
-//                HttpEntity<String> formEntity = new HttpEntity<String>(jsonObj.toString(), headers);
-//                log.info(formEntity.toString());
-//                JSONObject res = restTemplate.postForObject("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac", formEntity, JSONObject.class);
-
-//                String url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDmPxnCgbegDGs4eO8eG0Ww7C2vXq3fMac";
-//                JSONObject res = restTemplate.postForEntity(url, jsonObj, JSONObject.class).getBody();
-
                 OkHttpClient client = new OkHttpClient();
 
                 MediaType mediaType = MediaType.parse("application/json");
@@ -278,9 +197,8 @@ public class CoreServiceImpl implements CoreService {
                     }
                 }
 
-                String picaddress = "http://www.wiki2link.top/api/show?path="+ makepic(uremic)+".jpg";
-                article.setPicUrl(picaddress);//本地显示
-                //原地址
+                String picaddress = "http://47.74.153.66/api/show?path="+ makepic(uremic)+".jpg";
+                article.setPicUrl(picaddress);
                 article.setUrl(uremic);
 
                 StringBuilder repbody = new StringBuilder();
@@ -335,45 +253,16 @@ public class CoreServiceImpl implements CoreService {
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
                 // 事件类型
                 String eventType =requestMap.get("Event");
-                // 自定义菜单点击事件
-                if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
-                    switch (eventKey){
-                        case "11":{
-                            respContent = "这是第一栏第一个";
-                            break;
-                        }
-                        case "12":{
-                            respContent = "这是第一栏第一个";
-                            break;
-                        }
-                        case "21":{
-                            respContent = "这是第二栏第一个";
-                            break;
-                        }
-
-                        default:{
-                            log.error("开发者反馈：EventKey值没找到，它是:"+eventKey);
-                            respContent= "很抱歉，此按键功能正在升级无法使用";
-                        }
-                    }
-                    textMessage.setContent(respContent);
-                    // 将文本消息对象转换成xml字符串
-                    respMessage = MessageUtil.textMessageToXml(textMessage);
-                }
-                else if(eventType.equals(MessageUtil.EVENT_TYPE_VIEW)){
+                if(eventType.equals(MessageUtil.EVENT_TYPE_VIEW)){
                     // 对于点击菜单转网页暂时不做推送
                 }
-
                 // 订阅
                 else if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-                    //测试单图文回复
                     Article article = new Article();
                     article.setTitle("谢谢您的关注！");
-                    // 图文消息中可以使用QQ表情、符号表情
                     article.setDescription("主要提供面向人工智能服务");
-                    // 将图片置为空
-                    article.setPicUrl("http://www.wiki2link.top/bown.png");
-                    article.setUrl("http://www.wiki2link.cn");
+                    article.setPicUrl("http://47.74.153.66/bown.png");
+                    article.setUrl("http://www.siki.top");
                     articleList.add(article);
                     newsMessage.setArticleCount(articleList.size());
                     newsMessage.setArticles(articleList);
@@ -395,7 +284,6 @@ public class CoreServiceImpl implements CoreService {
                 }
                 // 取消订阅
                 else if (eventType.equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
-                    // TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
                     log.info("{} 用户取消订阅", fromUserName);
                 }
 
