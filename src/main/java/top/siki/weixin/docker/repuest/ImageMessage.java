@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * 图片消息
- * @author admin
+ * @author wiki
  */
 @Getter
 @Setter

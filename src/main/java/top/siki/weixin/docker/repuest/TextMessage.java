@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * 文本消息
- *
+ * @author wiki
  */
 @Getter
 @Setter

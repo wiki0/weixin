@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * 消息基类（普通用户 -> 公众帐号）
- * @author admin
+ * @author wiki
  */
 @Getter
 @Setter

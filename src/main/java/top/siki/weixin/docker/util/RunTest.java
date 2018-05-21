@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * @author admin
+ * @author wiki
  */
 public class RunTest {
 

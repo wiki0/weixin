@@ -23,7 +23,6 @@ import top.siki.weixin.docker.response.TextMessage;
 
 /**
  * 消息工具类
- *
  * @author wiki
  */
 public class MessageUtil {

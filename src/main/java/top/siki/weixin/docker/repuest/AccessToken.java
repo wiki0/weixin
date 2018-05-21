@@ -5,8 +5,7 @@ import lombok.Setter;
 
 /**
  * 微信通用接口凭证
- *
- * @author admin
+ * @author wiki
  */
 @Getter
 @Setter

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 文本消息
- *
+ * @author wiki
  */
 @Getter
 @Setter

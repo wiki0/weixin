@@ -21,7 +21,8 @@ import java.net.URL;
 
 
 /**
- * Created by Administrator on 2016/11/7.
+ * @author wiki
+ * @date 2016/11/7
  */
 public class WeixinUtil {
     private static Logger log = LoggerFactory.getLogger(WeixinUtil.class);

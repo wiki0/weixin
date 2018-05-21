@@ -5,7 +5,7 @@ import lombok.Setter;
 
 /**
  * 图文model
- *
+ * @author wiki
  */
 @Getter
 @Setter

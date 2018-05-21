@@ -9,6 +9,7 @@ import top.siki.weixin.docker.repuest.AccessToken;
  * 定时获取微信access_token的线程
  * 在WechatMpDemoApplication中注解@EnableScheduling，在程序启动时就开启定时任务。
  * 每7200秒执行一次
+ * @author wiki
  */
 @Component
 public class AccessTokenThread {
@@ -18,7 +19,7 @@ public class AccessTokenThread {
     public static String appid = "wxd84d3230eb686234";
 
     // 第三方用户唯一凭证密钥
-    public static String appsecret = "3997a7cc690500d61774312304b853dd";
+    public static String appsecret = "77010f7f2eda6d39c37a4d70f80613ff";
     // 第三方用户唯一凭证
     public static AccessToken accessToken = null;
 
