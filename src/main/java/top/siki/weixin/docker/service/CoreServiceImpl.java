@@ -161,7 +161,7 @@ public class CoreServiceImpl implements CoreService {
                 }
 
                 String picaddress = "http://47.74.153.66/api/show?path=" + makepic(uremic) + ".jpg";
-                article.setPicUrl(picaddress);
+                article.setPicUrl(uremic);
                 log.info(picaddress);
                 article.setUrl(picaddress);
 
