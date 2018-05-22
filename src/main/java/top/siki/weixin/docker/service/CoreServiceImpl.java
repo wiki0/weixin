@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import top.siki.weixin.docker.response.Article;
 import top.siki.weixin.docker.response.NewsMessage;
 import top.siki.weixin.docker.response.TextMessage;
+import top.siki.weixin.docker.thread.DownloadThread;
 import top.siki.weixin.docker.util.MessageUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -160,10 +163,19 @@ public class CoreServiceImpl implements CoreService {
                     }
                 }
 
-                String picaddress = "http://47.74.153.66/api/show?path=" + makepic(uremic) + ".jpg";
+//                String picaddress = "http://47.74.153.66/api/show?path=" + makepic(uremic) + ".jpg";
+
+                //创建一个可重用固定线程数的线程池
+                ExecutorService pool = Executors.newFixedThreadPool(2);
+                //创建实现了Runnable接口对象
+                Thread tt1 = new DownloadThread();
+                //将线程放入池中并执行
+                pool.execute(tt1);
+                //关闭
+                pool.shutdown();
                 article.setPicUrl(uremic);
-                log.info(picaddress);
-                article.setUrl(picaddress);
+                log.info(uremic);
+                article.setUrl(uremic);
 
                 StringBuilder repbody = new StringBuilder();
                 String adult = safeSearchAnnotation.getAsJsonObject().get("adult").getAsString();
